@@ -2,571 +2,804 @@
 
 import { useState } from "react"
 import Link from "next/link"
+import Image from "next/image"
+import { Search, MapPin, Phone, MessageCircle, Star, Tractor, Droplets, Wheat, Settings, Zap } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
+import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
+import { Badge } from "@/components/ui/badge"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import {
-  Menu,
-  X,
-  Search,
-  Filter,
-  MapPin,
-  Calendar,
-  Wheat,
-  Star,
-  ChevronRight,
-  Tractor,
-  Wrench,
-  Truck,
-  Zap,
-} from "lucide-react"
 
 export default function EquipmentPage() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [searchTerm, setSearchTerm] = useState("")
+  const [searchQuery, setSearchQuery] = useState("")
   const [selectedCategory, setSelectedCategory] = useState("all")
-  const [selectedLocation, setSelectedLocation] = useState("all")
 
-  const equipmentData = [
+  const equipmentCategories = [
+    { id: "all", name: "All Equipment", icon: "🚜" },
+    { id: "tractors", name: "Tractors", icon: "🚜" },
+    { id: "harvesters", name: "Harvesters", icon: "🌾" },
+    { id: "seeders", name: "Seeders", icon: "🌱" },
+    { id: "hoppers", name: "Hoppers", icon: "📦" },
+    { id: "spray-equipment", name: "Spray Equipment", icon: "💧" },
+    { id: "plows", name: "Plows & Tillers", icon: "⚒️" },
+    { id: "irrigation", name: "Irrigation", icon: "💧" },
+    { id: "tools", name: "Hand Tools", icon: "🔧" },
+    { id: "vehicles", name: "Farm Vehicles", icon: "🚛" },
+  ]
+
+  const equipment = [
     {
       id: 1,
-      name: "Massey Ferguson 375 Tractor",
-      category: "Tractors",
-      price: "$150/day",
-      location: "Harare",
-      rating: 4.8,
-      image: "/images/massey-ferguson-tractor.jpeg",
-      description: "Powerful 75HP tractor perfect for medium to large farming operations",
-      features: ["75HP Engine", "4WD", "Power Steering", "PTO"],
-      availability: "Available",
-      owner: "John Mukamuri",
+      title: "John Deere 5075E Tractor",
+      description: "75HP utility tractor perfect for medium-scale farming operations. Well maintained with low hours.",
+      dailyRate: 45,
+      weeklyRate: 280,
+      monthlyRate: 1000,
+      location: "Harare, Zimbabwe",
+      owner: {
+        name: "AgriRent Services",
+        avatar: "/placeholder.svg?height=40&width=40",
+        rating: 4.8,
+        totalRentals: 156,
+      },
+      images: ["/placeholder.svg?height=300&width=400"],
+      category: "tractors",
+      specifications: {
+        horsepower: "75 HP",
+        fuelType: "Diesel",
+        transmission: "Manual",
+        condition: "Excellent",
+      },
+      availability: "Available Now",
+      featured: true,
+      reviews: 23,
     },
     {
       id: 2,
-      name: "John Deere Combine Harvester",
-      category: "Harvesters",
-      price: "$300/day",
-      location: "Bulawayo",
-      rating: 4.9,
-      image: "/images/john-deere-harvester.png",
-      description: "High-capacity combine harvester for efficient grain harvesting",
-      features: ["Large Capacity", "GPS Guided", "Grain Tank", "Chopper"],
-      availability: "Available",
-      owner: "AgriTech Solutions",
+      title: "Case IH Combine Harvester",
+      description: "High-capacity combine harvester suitable for wheat, maize, and soybean harvesting.",
+      dailyRate: 120,
+      weeklyRate: 750,
+      monthlyRate: 2800,
+      location: "Bulawayo, Zimbabwe",
+      owner: {
+        name: "Harvest Solutions",
+        avatar: "/placeholder.svg?height=40&width=40",
+        rating: 4.9,
+        totalRentals: 89,
+      },
+      images: ["/placeholder.svg?height=300&width=400"],
+      category: "harvesters",
+      specifications: {
+        capacity: "8 tonnes/hour",
+        fuelType: "Diesel",
+        headerWidth: "6 meters",
+        condition: "Very Good",
+      },
+      availability: "Available from March 15",
+      featured: true,
+      reviews: 18,
     },
     {
       id: 3,
-      name: "Precision Seed Planter",
-      category: "Planters",
-      price: "$80/day",
-      location: "Mutare",
-      rating: 4.7,
-      image: "/images/precision-planter.webp",
-      description: "Advanced precision planter for optimal seed placement",
-      features: ["GPS Precision", "12-Row", "Variable Rate", "Monitor"],
-      availability: "Rented",
-      owner: "Modern Farming Co.",
+      title: "Massey Ferguson Disc Plow",
+      description: "Heavy-duty disc plow for primary tillage. Suitable for various soil conditions.",
+      dailyRate: 25,
+      weeklyRate: 150,
+      monthlyRate: 550,
+      location: "Gweru, Zimbabwe",
+      owner: {
+        name: "Farm Tools Zimbabwe",
+        avatar: "/placeholder.svg?height=40&width=40",
+        rating: 4.6,
+        totalRentals: 67,
+      },
+      images: ["/placeholder.svg?height=300&width=400"],
+      category: "plows",
+      specifications: {
+        workingWidth: "3 meters",
+        discSize: "24 inches",
+        weight: "850 kg",
+        condition: "Good",
+      },
+      availability: "Available Now",
+      featured: false,
+      reviews: 12,
     },
     {
       id: 4,
-      name: "Boom Sprayer System",
-      category: "Sprayers",
-      price: "$60/day",
-      location: "Gweru",
-      rating: 4.6,
-      image: "/images/boom-sprayer.jpeg",
-      description: "Professional boom sprayer for crop protection applications",
-      features: ["24m Boom", "Auto Steer", "2000L Tank", "Rate Control"],
-      availability: "Available",
-      owner: "CropCare Services",
+      title: "Irrigation Sprinkler System",
+      description: "Complete center pivot irrigation system for large-scale crop irrigation.",
+      dailyRate: 35,
+      weeklyRate: 220,
+      monthlyRate: 800,
+      location: "Mutare, Zimbabwe",
+      owner: {
+        name: "AquaFarm Systems",
+        avatar: "/placeholder.svg?height=40&width=40",
+        rating: 4.7,
+        totalRentals: 34,
+      },
+      images: ["/placeholder.svg?height=300&width=400"],
+      category: "irrigation",
+      specifications: {
+        coverage: "50 hectares",
+        waterFlow: "500 L/min",
+        powerSource: "Electric",
+        condition: "Excellent",
+      },
+      availability: "Available Now",
+      featured: false,
+      reviews: 8,
     },
     {
       id: 5,
-      name: "Irrigation System Package",
-      category: "Irrigation",
-      price: "$200/month",
-      location: "Masvingo",
-      rating: 4.8,
-      image: "/images/irrigation-system.png",
-      description: "Complete drip irrigation system for efficient water management",
-      features: ["Drip Lines", "Control Unit", "Filters", "Timers"],
-      availability: "Available",
-      owner: "WaterWise Irrigation",
+      title: "Farm Truck - Isuzu NPR",
+      description: "Reliable farm truck for transporting produce and equipment. 3-tonne capacity.",
+      dailyRate: 40,
+      weeklyRate: 250,
+      monthlyRate: 900,
+      location: "Chinhoyi, Zimbabwe",
+      owner: {
+        name: "Transport Solutions",
+        avatar: "/placeholder.svg?height=40&width=40",
+        rating: 4.5,
+        totalRentals: 78,
+      },
+      images: ["/placeholder.svg?height=300&width=400"],
+      category: "vehicles",
+      specifications: {
+        capacity: "3 tonnes",
+        fuelType: "Diesel",
+        transmission: "Manual",
+        condition: "Good",
+      },
+      availability: "Available from next week",
+      featured: false,
+      reviews: 15,
     },
     {
       id: 6,
-      name: "Multi-Row Planter Equipment",
-      category: "Planters",
-      price: "$120/day",
-      location: "Chinhoyi",
-      rating: 4.5,
-      image: "/images/planter-equipment.png",
-      description: "Heavy-duty multi-row planter for large-scale operations",
-      features: ["8-Row Setup", "Seed Monitor", "Fertilizer Box", "Depth Control"],
-      availability: "Available",
-      owner: "PlantTech Zimbabwe",
+      title: "Seed Drill Planter",
+      description: "Precision seed drill for accurate planting of various crops. GPS-guided system.",
+      dailyRate: 30,
+      weeklyRate: 180,
+      monthlyRate: 650,
+      location: "Masvingo, Zimbabwe",
+      owner: {
+        name: "Precision Farming Co.",
+        avatar: "/placeholder.svg?height=40&width=40",
+        rating: 4.8,
+        totalRentals: 45,
+      },
+      images: ["/placeholder.svg?height=300&width=400"],
+      category: "tools",
+      specifications: {
+        rowSpacing: "Variable",
+        seedCapacity: "500 kg",
+        gpsGuided: "Yes",
+        condition: "Excellent",
+      },
+      availability: "Available Now",
+      featured: true,
+      reviews: 11,
     },
   ]
 
-  const categories = [
-    { value: "all", label: "All Categories" },
-    { value: "tractors", label: "Tractors" },
-    { value: "harvesters", label: "Harvesters" },
-    { value: "planters", label: "Planters" },
-    { value: "sprayers", label: "Sprayers" },
-    { value: "irrigation", label: "Irrigation" },
-  ]
-
-  const locations = [
-    { value: "all", label: "All Locations" },
-    { value: "harare", label: "Harare" },
-    { value: "bulawayo", label: "Bulawayo" },
-    { value: "mutare", label: "Mutare" },
-    { value: "gweru", label: "Gweru" },
-    { value: "masvingo", label: "Masvingo" },
-    { value: "chinhoyi", label: "Chinhoyi" },
-  ]
-
-  const filteredEquipment = equipmentData.filter((item) => {
+  const filteredEquipment = equipment.filter((item) => {
     const matchesSearch =
-      item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.description.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesCategory = selectedCategory === "all" || item.category.toLowerCase() === selectedCategory
-    const matchesLocation = selectedLocation === "all" || item.location.toLowerCase() === selectedLocation
-
-    return matchesSearch && matchesCategory && matchesLocation
+      item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.description.toLowerCase().includes(searchQuery.toLowerCase())
+    const matchesCategory = selectedCategory === "all" || item.category === selectedCategory
+    return matchesSearch && matchesCategory
   })
+
+  const EquipmentCard = ({ item }: { item: (typeof equipment)[0] }) => (
+    <Card className="overflow-hidden hover:shadow-lg transition-shadow">
+      <div className="relative">
+        <Image
+          src={item.images[0] || "/placeholder.svg"}
+          alt={item.title}
+          width={400}
+          height={250}
+          className="w-full h-48 object-cover"
+        />
+        {item.featured && <Badge className="absolute top-2 left-2 bg-orange-500">Featured</Badge>}
+        <Badge
+          variant={item.availability === "Available Now" ? "default" : "secondary"}
+          className="absolute top-2 right-2"
+        >
+          {item.availability}
+        </Badge>
+      </div>
+
+      <CardContent className="p-4">
+        <h3 className="font-semibold text-lg mb-2 line-clamp-2">{item.title}</h3>
+        <p className="text-gray-600 text-sm mb-3 line-clamp-2">{item.description}</p>
+
+        <div className="grid grid-cols-3 gap-2 mb-3 text-center">
+          <div className="bg-gray-50 p-2 rounded">
+            <p className="text-xs text-gray-500">Daily</p>
+            <p className="font-semibold text-green-600">${item.dailyRate}</p>
+          </div>
+          <div className="bg-gray-50 p-2 rounded">
+            <p className="text-xs text-gray-500">Weekly</p>
+            <p className="font-semibold text-green-600">${item.weeklyRate}</p>
+          </div>
+          <div className="bg-gray-50 p-2 rounded">
+            <p className="text-xs text-gray-500">Monthly</p>
+            <p className="font-semibold text-green-600">${item.monthlyRate}</p>
+          </div>
+        </div>
+
+        <div className="space-y-2 mb-3">
+          <div className="flex items-center text-gray-600">
+            <MapPin className="h-4 w-4 mr-1" />
+            <span className="text-sm">{item.location}</span>
+          </div>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <Avatar className="h-6 w-6">
+                <AvatarImage src={item.owner.avatar || "/placeholder.svg"} alt={item.owner.name} />
+                <AvatarFallback className="text-xs">
+                  {item.owner.name
+                    .split(" ")
+                    .map((n) => n[0])
+                    .join("")}
+                </AvatarFallback>
+              </Avatar>
+              <div>
+                <p className="text-sm font-medium">{item.owner.name}</p>
+                <div className="flex items-center">
+                  <Star className="h-3 w-3 text-yellow-400 fill-current" />
+                  <span className="text-xs text-gray-500 ml-1">
+                    {item.owner.rating} ({item.reviews})
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex gap-2">
+          <Button size="sm" className="flex-1 bg-green-600 hover:bg-green-700">
+            <Phone className="h-4 w-4 mr-1" />
+            Call Owner
+          </Button>
+          <Button size="sm" variant="outline" className="flex-1 bg-transparent">
+            <MessageCircle className="h-4 w-4 mr-1" />
+            WhatsApp
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
+  )
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Navigation */}
-      <nav className="bg-white shadow-sm border-b sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
-              <Link href="/" className="flex-shrink-0 flex items-center">
-                <Wheat className="h-8 w-8 text-green-600" />
-                <span className="ml-2 text-xl font-bold text-gray-900">FarmersZW</span>
-              </Link>
-            </div>
-
-            <div className="hidden md:block">
-              <div className="ml-10 flex items-baseline space-x-4">
-                <Link
-                  href="/marketplace"
-                  className="text-gray-600 hover:text-green-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-                >
-                  Marketplace
-                </Link>
-                <Link href="/equipment" className="text-green-600 px-3 py-2 rounded-md text-sm font-medium">
-                  Equipment
-                </Link>
-                <Link
-                  href="/livestock"
-                  className="text-gray-600 hover:text-green-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-                >
-                  Livestock
-                </Link>
-                <Link
-                  href="/jobs"
-                  className="text-gray-600 hover:text-green-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-                >
-                  Jobs
-                </Link>
-                <Link
-                  href="/services"
-                  className="text-gray-600 hover:text-green-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-                >
-                  Services
-                </Link>
-                <Link
-                  href="/events"
-                  className="text-gray-600 hover:text-green-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-                >
-                  Events
-                </Link>
-              </div>
-            </div>
-
-            <div className="hidden md:flex items-center space-x-4">
-              <Link href="/auth">
-                <Button variant="outline" size="sm">
-                  Sign In
-                </Button>
-              </Link>
-              <Link href="/create-listing">
-                <Button size="sm" className="bg-green-600 hover:bg-green-700">
-                  List Equipment
-                </Button>
-              </Link>
-            </div>
-
-            <div className="md:hidden">
-              <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="text-gray-600 hover:text-green-600">
-                {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Mobile menu */}
-        {isMenuOpen && (
-          <div className="md:hidden">
-            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t">
-              <Link href="/marketplace" className="block px-3 py-2 text-gray-600 hover:text-green-600">
+      {/* Header */}
+      <header className="bg-white border-b sticky top-0 z-50">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <Link href="/" className="flex items-center space-x-3">
+              <Image
+                src="/images/musika-wethu-logo.png"
+                alt="Musika Wethu - Zimbabwe's Agricultural Marketplace"
+                width={270}
+                height={90}
+                className="h-20 w-auto"
+                style={{ background: "transparent" }}
+              />
+            </Link>
+            <nav className="hidden md:flex items-center space-x-6">
+              <Link href="/marketplace" className="text-gray-600 hover:text-green-600">
                 Marketplace
               </Link>
-              <Link href="/equipment" className="block px-3 py-2 text-green-600 font-medium">
+              <Link href="/equipment" className="text-green-600 font-medium">
                 Equipment
               </Link>
-              <Link href="/livestock" className="block px-3 py-2 text-gray-600 hover:text-green-600">
-                Livestock
-              </Link>
-              <Link href="/jobs" className="block px-3 py-2 text-gray-600 hover:text-green-600">
+              <Link href="/jobs" className="text-gray-600 hover:text-green-600">
                 Jobs
               </Link>
-              <Link href="/services" className="block px-3 py-2 text-gray-600 hover:text-green-600">
+              <Link href="/services" className="text-gray-600 hover:text-green-600">
                 Services
               </Link>
-              <Link href="/events" className="block px-3 py-2 text-gray-600 hover:text-green-600">
+              <Link href="/events" className="text-gray-600 hover:text-green-600">
                 Events
               </Link>
-              <div className="border-t pt-2">
-                <Link href="/auth" className="block px-3 py-2 text-gray-600 hover:text-green-600">
-                  Sign In
-                </Link>
-                <Link href="/create-listing" className="block px-3 py-2 text-green-600 font-medium">
-                  List Equipment
-                </Link>
+              <Link href="/livestock" className="text-gray-600 hover:text-green-600">
+                Livestock
+              </Link>
+              <Link href="/legal-compliance" className="text-gray-600 hover:text-green-600">
+                Legal Compliance
+              </Link>
+            </nav>
+            <div className="flex items-center space-x-2">
+              <Link href="/dashboard">
+                <Button variant="outline">Dashboard</Button>
+              </Link>
+              <Link href="/create-listing">
+                <Button className="bg-green-600 hover:bg-green-700">List Equipment</Button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* Hero Section with Equipment Background */}
+      <section className="relative bg-gradient-to-r from-green-600 to-green-700 text-white py-16 overflow-hidden">
+        <div className="absolute inset-0 opacity-10">
+          <Image
+            src="/images/irrigation-system.png"
+            alt="Farm Equipment Background"
+            width={1920}
+            height={400}
+            className="w-full h-full object-cover"
+          />
+        </div>
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="text-center">
+            <h1 className="text-5xl font-bold mb-4">Farm Equipment Rental</h1>
+            <p className="text-xl mb-8">
+              Rent tractors, harvesters, and farming equipment from trusted owners across Zimbabwe
+            </p>
+
+            <div className="max-w-2xl mx-auto">
+              <div className="relative">
+                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+                <Input
+                  placeholder="Search for tractors, harvesters, plows..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-12 h-12 text-gray-900"
+                />
               </div>
             </div>
           </div>
-        )}
-      </nav>
+        </div>
+      </section>
 
-      {/* Hero Section */}
-      <section className="relative bg-gradient-to-r from-blue-600 to-blue-800 text-white py-20">
-        <div className="absolute inset-0 bg-black opacity-20"></div>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">Agricultural Equipment Rental</h1>
-            <p className="text-xl mb-8 text-blue-100 max-w-3xl mx-auto">
-              Access modern farming equipment to boost your productivity. Rent tractors, harvesters, planters, and more
-              from verified equipment owners across Zimbabwe.
+      {/* Equipment Showcase Section */}
+      <section className="py-20 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-gray-900 mb-6">Professional Farm Equipment</h2>
+            <p className="text-xl text-gray-600 max-w-4xl mx-auto">
+              Access Zimbabwe's most comprehensive collection of modern agricultural machinery from trusted suppliers.
+              From precision planters to powerful harvesters, find the right equipment for your farming needs.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold">
-                Browse Equipment
-                <ChevronRight className="ml-2 h-5 w-5" />
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                className="border-white text-white hover:bg-white hover:text-blue-600 bg-transparent"
-              >
-                List Your Equipment
-              </Button>
+          </div>
+
+          {/* Main Equipment Showcase Grid */}
+          <div className="grid lg:grid-cols-2 gap-10 mb-20">
+            {/* Irrigation Systems */}
+            <Card className="overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2">
+              <div className="relative h-80">
+                <Image
+                  src="/images/irrigation-system.png"
+                  alt="Center Pivot Irrigation System in Action"
+                  width={800}
+                  height={320}
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                <div className="absolute top-6 left-6 bg-white/90 backdrop-blur-sm rounded-full p-4">
+                  <Droplets className="h-10 w-10 text-blue-600" />
+                </div>
+                <div className="absolute bottom-6 left-6 text-white">
+                  <h3 className="text-2xl font-bold mb-2">Irrigation Systems</h3>
+                  <p className="text-sm opacity-90">Advanced water management technology</p>
+                </div>
+              </div>
+              <CardContent className="p-8">
+                <p className="text-gray-600 mb-6 text-lg">
+                  State-of-the-art center pivot and sprinkler systems for efficient water management across large
+                  agricultural areas. Perfect for maximizing crop yields while conserving water resources.
+                </p>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="flex items-center text-gray-700">
+                    <div className="w-3 h-3 bg-blue-500 rounded-full mr-3" />
+                    <span className="font-medium">Water-efficient technology</span>
+                  </div>
+                  <div className="flex items-center text-gray-700">
+                    <div className="w-3 h-3 bg-blue-500 rounded-full mr-3" />
+                    <span className="font-medium">GPS-controlled systems</span>
+                  </div>
+                  <div className="flex items-center text-gray-700">
+                    <div className="w-3 h-3 bg-blue-500 rounded-full mr-3" />
+                    <span className="font-medium">Coverage up to 100 hectares</span>
+                  </div>
+                  <div className="flex items-center text-gray-700">
+                    <div className="w-3 h-3 bg-blue-500 rounded-full mr-3" />
+                    <span className="font-medium">Automated scheduling</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Combine Harvesters */}
+            <Card className="overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2">
+              <div className="relative h-80">
+                <Image
+                  src="/images/combine-harvester.png"
+                  alt="John Deere Combine Harvester in Field"
+                  width={800}
+                  height={320}
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                <div className="absolute top-6 left-6 bg-white/90 backdrop-blur-sm rounded-full p-4">
+                  <Wheat className="h-10 w-10 text-yellow-600" />
+                </div>
+                <div className="absolute bottom-6 left-6 text-white">
+                  <h3 className="text-2xl font-bold mb-2">Combine Harvesters</h3>
+                  <p className="text-sm opacity-90">High-capacity grain harvesting</p>
+                </div>
+              </div>
+              <CardContent className="p-8">
+                <p className="text-gray-600 mb-6 text-lg">
+                  High-capacity harvesters for wheat, maize, soybean and other grain crops with advanced threshing
+                  technology. Maximize your harvest efficiency with precision agriculture features.
+                </p>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="flex items-center text-gray-700">
+                    <div className="w-3 h-3 bg-yellow-500 rounded-full mr-3" />
+                    <span className="font-medium">Multi-crop capability</span>
+                  </div>
+                  <div className="flex items-center text-gray-700">
+                    <div className="w-3 h-3 bg-yellow-500 rounded-full mr-3" />
+                    <span className="font-medium">GPS guidance systems</span>
+                  </div>
+                  <div className="flex items-center text-gray-700">
+                    <div className="w-3 h-3 bg-yellow-500 rounded-full mr-3" />
+                    <span className="font-medium">Real-time yield monitoring</span>
+                  </div>
+                  <div className="flex items-center text-gray-700">
+                    <div className="w-3 h-3 bg-yellow-500 rounded-full mr-3" />
+                    <span className="font-medium">Large grain tank capacity</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Modern Tractors */}
+            <Card className="overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2">
+              <div className="relative h-80">
+                <Image
+                  src="/images/landini-tractor.jpeg"
+                  alt="Modern Landini Tractor"
+                  width={800}
+                  height={320}
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                <div className="absolute top-6 left-6 bg-white/90 backdrop-blur-sm rounded-full p-4">
+                  <Tractor className="h-10 w-10 text-green-600" />
+                </div>
+                <div className="absolute bottom-6 left-6 text-white">
+                  <h3 className="text-2xl font-bold mb-2">Modern Tractors</h3>
+                  <p className="text-sm opacity-90">Powerful & fuel-efficient</p>
+                </div>
+              </div>
+              <CardContent className="p-8">
+                <p className="text-gray-600 mb-6 text-lg">
+                  Powerful and fuel-efficient tractors from leading brands like Landini, Massey Ferguson, and John
+                  Deere. Built for reliability and performance in Zimbabwe's diverse farming conditions.
+                </p>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="flex items-center text-gray-700">
+                    <div className="w-3 h-3 bg-green-500 rounded-full mr-3" />
+                    <span className="font-medium">40-200 HP range</span>
+                  </div>
+                  <div className="flex items-center text-gray-700">
+                    <div className="w-3 h-3 bg-green-500 rounded-full mr-3" />
+                    <span className="font-medium">4WD capability</span>
+                  </div>
+                  <div className="flex items-center text-gray-700">
+                    <div className="w-3 h-3 bg-green-500 rounded-full mr-3" />
+                    <span className="font-medium">Air-conditioned cabins</span>
+                  </div>
+                  <div className="flex items-center text-gray-700">
+                    <div className="w-3 h-3 bg-green-500 rounded-full mr-3" />
+                    <span className="font-medium">PTO & hydraulic systems</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Precision Planters */}
+            <Card className="overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2">
+              <div className="relative h-80">
+                <Image
+                  src="/images/precision-planter.webp"
+                  alt="Precision Planter Equipment"
+                  width={800}
+                  height={320}
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                <div className="absolute top-6 left-6 bg-white/90 backdrop-blur-sm rounded-full p-4">
+                  <Settings className="h-10 w-10 text-red-600" />
+                </div>
+                <div className="absolute bottom-6 left-6 text-white">
+                  <h3 className="text-2xl font-bold mb-2">Precision Planters</h3>
+                  <p className="text-sm opacity-90">Accurate seed placement</p>
+                </div>
+              </div>
+              <CardContent className="p-8">
+                <p className="text-gray-600 mb-6 text-lg">
+                  State-of-the-art planting equipment for accurate seed placement and optimal crop establishment.
+                  Maximize your planting efficiency with precision agriculture technology.
+                </p>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="flex items-center text-gray-700">
+                    <div className="w-3 h-3 bg-red-500 rounded-full mr-3" />
+                    <span className="font-medium">Variable rate seeding</span>
+                  </div>
+                  <div className="flex items-center text-gray-700">
+                    <div className="w-3 h-3 bg-red-500 rounded-full mr-3" />
+                    <span className="font-medium">GPS guidance</span>
+                  </div>
+                  <div className="flex items-center text-gray-700">
+                    <div className="w-3 h-3 bg-red-500 rounded-full mr-3" />
+                    <span className="font-medium">Multiple row configurations</span>
+                  </div>
+                  <div className="flex items-center text-gray-700">
+                    <div className="w-3 h-3 bg-red-500 rounded-full mr-3" />
+                    <span className="font-medium">Seed monitoring systems</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Equipment Gallery Section */}
+          <div className="mb-16">
+            <h3 className="text-2xl font-bold text-center mb-8 text-gray-900">Equipment Categories</h3>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+              <div className="relative h-40 rounded-xl overflow-hidden group cursor-pointer">
+                <Image
+                  src="/images/boom-sprayer.jpeg"
+                  alt="Boom Sprayer Equipment"
+                  width={400}
+                  height={160}
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-blue-600/80 to-transparent flex items-end">
+                  <div className="p-4 text-white">
+                    <h4 className="font-bold text-lg">Sprayers</h4>
+                    <p className="text-sm opacity-90">Crop protection equipment</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="relative h-40 rounded-xl overflow-hidden group cursor-pointer">
+                <Image
+                  src="/images/seeding-equipment.png"
+                  alt="John Deere Seeding Equipment"
+                  width={400}
+                  height={160}
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-green-600/80 to-transparent flex items-end">
+                  <div className="p-4 text-white">
+                    <h4 className="font-bold text-lg">Seeders</h4>
+                    <p className="text-sm opacity-90">Precision seeding systems</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="relative h-40 rounded-xl overflow-hidden group cursor-pointer">
+                <Image
+                  src="/images/massey-ferguson-tractor.jpeg"
+                  alt="Massey Ferguson Tractor"
+                  width={400}
+                  height={160}
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-red-600/80 to-transparent flex items-end">
+                  <div className="p-4 text-white">
+                    <h4 className="font-bold text-lg">Tractors</h4>
+                    <p className="text-sm opacity-90">Multi-purpose farm power</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="relative h-40 rounded-xl overflow-hidden group cursor-pointer">
+                <Image
+                  src="/images/warehouse-planters.png"
+                  alt="Warehouse Planters"
+                  width={400}
+                  height={160}
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-purple-600/80 to-transparent flex items-end">
+                  <div className="p-4 text-white">
+                    <h4 className="font-bold text-lg">Planters</h4>
+                    <p className="text-sm opacity-90">Professional planting solutions</p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
 
-      {/* Search and Filters */}
-      <section className="py-8 bg-white border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row gap-4 items-center">
-            <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
-              <Input
-                placeholder="Search equipment..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10"
+          {/* Equipment Types Overview */}
+          <div className="grid grid-cols-3 md:grid-cols-6 gap-4 mb-12">
+            <div className="relative h-28 rounded-lg overflow-hidden group">
+              <Image
+                src="/images/john-deere-harvester.png"
+                alt="John Deere Harvester"
+                width={200}
+                height={112}
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
               />
+              <div className="absolute inset-0 bg-green-600/70 flex items-center justify-center">
+                <span className="text-white font-bold text-sm text-center">Harvesters</span>
+              </div>
             </div>
-            <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-              <SelectTrigger className="w-full md:w-48">
-                <SelectValue placeholder="Category" />
-              </SelectTrigger>
-              <SelectContent>
-                {categories.map((category) => (
-                  <SelectItem key={category.value} value={category.value}>
-                    {category.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <Select value={selectedLocation} onValueChange={setSelectedLocation}>
-              <SelectTrigger className="w-full md:w-48">
-                <SelectValue placeholder="Location" />
-              </SelectTrigger>
-              <SelectContent>
-                {locations.map((location) => (
-                  <SelectItem key={location.value} value={location.value}>
-                    {location.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+
+            <div className="relative h-28 rounded-lg overflow-hidden group">
+              <Image
+                src="/images/planter-equipment.png"
+                alt="Planter Equipment"
+                width={200}
+                height={112}
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              />
+              <div className="absolute inset-0 bg-red-600/70 flex items-center justify-center">
+                <span className="text-white font-bold text-sm text-center">Planters</span>
+              </div>
+            </div>
+
+            <div className="relative h-28 rounded-lg overflow-hidden group">
+              <Image
+                src="/images/boom-sprayer.jpeg"
+                alt="Sprayer Equipment"
+                width={200}
+                height={112}
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              />
+              <div className="absolute inset-0 bg-blue-600/70 flex items-center justify-center">
+                <span className="text-white font-bold text-sm text-center">Sprayers</span>
+              </div>
+            </div>
+
+            <div className="relative h-28 rounded-lg overflow-hidden group">
+              <Image
+                src="/images/seeding-equipment.png"
+                alt="Seeding Equipment"
+                width={200}
+                height={112}
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              />
+              <div className="absolute inset-0 bg-yellow-600/70 flex items-center justify-center">
+                <span className="text-white font-bold text-sm text-center">Seeders</span>
+              </div>
+            </div>
+
+            <div className="relative h-28 rounded-lg overflow-hidden group">
+              <Image
+                src="/images/landini-tractor.jpeg"
+                alt="Tractor Equipment"
+                width={200}
+                height={112}
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              />
+              <div className="absolute inset-0 bg-purple-600/70 flex items-center justify-center">
+                <span className="text-white font-bold text-sm text-center">Tractors</span>
+              </div>
+            </div>
+
+            <div className="relative h-28 rounded-lg overflow-hidden group">
+              <Image
+                src="/images/irrigation-system.png"
+                alt="Irrigation Equipment"
+                width={200}
+                height={112}
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              />
+              <div className="absolute inset-0 bg-orange-600/70 flex items-center justify-center">
+                <span className="text-white font-bold text-sm text-center">Irrigation</span>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Equipment Grid */}
+      {/* Categories */}
+      <section className="py-12 bg-gray-100 border-b">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-wrap gap-4 justify-center">
+            {equipmentCategories.map((category) => (
+              <Button
+                key={category.id}
+                variant={selectedCategory === category.id ? "default" : "outline"}
+                onClick={() => setSelectedCategory(category.id)}
+                className="flex items-center space-x-2 px-6 py-3"
+              >
+                <span className="text-lg">{category.icon}</span>
+                <span className="font-medium">{category.name}</span>
+              </Button>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Equipment Listings */}
       <section className="py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center mb-8">
-            <h2 className="text-2xl font-bold text-gray-900">Available Equipment ({filteredEquipment.length})</h2>
-            <div className="flex items-center space-x-2 text-sm text-gray-600">
-              <Filter className="h-4 w-4" />
-              <span>Sort by: Relevance</span>
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-between mb-8">
+            <div>
+              <h2 className="text-3xl font-bold text-gray-900">Available Equipment</h2>
+              <p className="text-gray-600 text-lg">{filteredEquipment.length} items available for rent</p>
             </div>
+
+            <Select defaultValue="featured">
+              <SelectTrigger className="w-48">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="featured">Featured First</SelectItem>
+                <SelectItem value="price-low">Price: Low to High</SelectItem>
+                <SelectItem value="price-high">Price: High to Low</SelectItem>
+                <SelectItem value="rating">Highest Rated</SelectItem>
+                <SelectItem value="newest">Newest First</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredEquipment.map((equipment) => (
-              <Card key={equipment.id} className="hover:shadow-xl transition-all duration-300 group overflow-hidden">
-                <div className="relative aspect-video overflow-hidden">
-                  <img
-                    src={equipment.image || "/placeholder.svg"}
-                    alt={equipment.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  <Badge
-                    className={`absolute top-3 right-3 ${
-                      equipment.availability === "Available" ? "bg-green-600" : "bg-red-600"
-                    }`}
-                  >
-                    {equipment.availability}
-                  </Badge>
-                  <div className="absolute bottom-3 left-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <div className="flex items-center text-white text-sm">
-                      <MapPin className="h-4 w-4 mr-1" />
-                      {equipment.location}
-                    </div>
-                  </div>
-                </div>
-
-                <CardHeader className="pb-3">
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <CardTitle className="text-lg group-hover:text-blue-600 transition-colors">
-                        {equipment.name}
-                      </CardTitle>
-                      <CardDescription className="text-sm text-gray-600">{equipment.category}</CardDescription>
-                    </div>
-                    <div className="flex items-center">
-                      <Star className="h-4 w-4 text-yellow-400 fill-current" />
-                      <span className="text-sm text-gray-600 ml-1">{equipment.rating}</span>
-                    </div>
-                  </div>
-                </CardHeader>
-
-                <CardContent className="pt-0">
-                  <p className="text-gray-600 text-sm mb-4 line-clamp-2">{equipment.description}</p>
-
-                  <div className="flex flex-wrap gap-1 mb-4">
-                    {equipment.features.slice(0, 3).map((feature, index) => (
-                      <Badge key={index} variant="secondary" className="text-xs">
-                        {feature}
-                      </Badge>
-                    ))}
-                    {equipment.features.length > 3 && (
-                      <Badge variant="secondary" className="text-xs">
-                        +{equipment.features.length - 3} more
-                      </Badge>
-                    )}
-                  </div>
-
-                  <div className="flex justify-between items-center mb-4">
-                    <div>
-                      <div className="text-2xl font-bold text-green-600">{equipment.price}</div>
-                      <div className="text-xs text-gray-500">by {equipment.owner}</div>
-                    </div>
-                    <div className="flex items-center text-sm text-gray-600">
-                      <Calendar className="h-4 w-4 mr-1" />
-                      Book Now
-                    </div>
-                  </div>
-
-                  <div className="flex gap-2">
-                    <Button className="flex-1" disabled={equipment.availability !== "Available"}>
-                      {equipment.availability === "Available" ? "Rent Now" : "Not Available"}
-                    </Button>
-                    <Button variant="outline" size="sm">
-                      <Wrench className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
+            {filteredEquipment.map((item) => (
+              <EquipmentCard key={item.id} item={item} />
             ))}
           </div>
 
           {filteredEquipment.length === 0 && (
-            <div className="text-center py-12">
-              <Tractor className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No equipment found</h3>
-              <p className="text-gray-600">Try adjusting your search criteria or browse all equipment.</p>
+            <div className="text-center py-16">
+              <div className="text-8xl mb-6">🚜</div>
+              <h3 className="text-2xl font-semibold text-gray-600 mb-3">No equipment found</h3>
+              <p className="text-gray-500 text-lg">Try adjusting your search or category filters</p>
             </div>
           )}
         </div>
       </section>
 
-      {/* Equipment Types Overview */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Equipment Categories</h2>
-            <p className="text-xl text-gray-600">Find the right equipment for your farming needs</p>
-          </div>
-
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            <div className="text-center group cursor-pointer">
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-blue-200 transition-colors">
-                <Tractor className="h-8 w-8 text-blue-600" />
+      {/* How It Works */}
+      <section className="bg-gray-100 py-20">
+        <div className="container mx-auto px-4">
+          <h2 className="text-4xl font-bold text-center mb-16">How Equipment Rental Works</h2>
+          <div className="grid md:grid-cols-3 gap-12">
+            <div className="text-center">
+              <div className="bg-green-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Search className="h-10 w-10 text-green-600" />
               </div>
-              <h3 className="font-semibold text-gray-900 mb-2">Tractors</h3>
-              <p className="text-sm text-gray-600">Power units for various farming operations</p>
+              <h3 className="text-2xl font-semibold mb-4">1. Search & Browse</h3>
+              <p className="text-gray-600 text-lg">
+                Find the equipment you need by location, type, and availability using our advanced search filters.
+              </p>
             </div>
-
-            <div className="text-center group cursor-pointer">
-              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-green-200 transition-colors">
-                <Wheat className="h-8 w-8 text-green-600" />
+            <div className="text-center">
+              <div className="bg-green-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Phone className="h-10 w-10 text-green-600" />
               </div>
-              <h3 className="font-semibold text-gray-900 mb-2">Harvesters</h3>
-              <p className="text-sm text-gray-600">Efficient crop harvesting equipment</p>
+              <h3 className="text-2xl font-semibold mb-4">2. Contact Owner</h3>
+              <p className="text-gray-600 text-lg">
+                Call or WhatsApp the equipment owner directly to discuss terms, availability, and arrange pickup.
+              </p>
             </div>
-
-            <div className="text-center group cursor-pointer">
-              <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-purple-200 transition-colors">
-                <Zap className="h-8 w-8 text-purple-600" />
+            <div className="text-center">
+              <div className="bg-green-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Zap className="h-10 w-10 text-green-600" />
               </div>
-              <h3 className="font-semibold text-gray-900 mb-2">Planters</h3>
-              <p className="text-sm text-gray-600">Precision seeding and planting equipment</p>
-            </div>
-
-            <div className="text-center group cursor-pointer">
-              <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-orange-200 transition-colors">
-                <Truck className="h-8 w-8 text-orange-600" />
-              </div>
-              <h3 className="font-semibold text-gray-900 mb-2">Sprayers</h3>
-              <p className="text-sm text-gray-600">Crop protection and fertilizer application</p>
+              <h3 className="text-2xl font-semibold mb-4">3. Rent & Farm</h3>
+              <p className="text-gray-600 text-lg">
+                Complete the rental agreement, get your equipment, and boost your farming productivity!
+              </p>
             </div>
           </div>
         </div>
       </section>
-
-      {/* CTA Section */}
-      <section className="py-16 bg-blue-600 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold mb-6">Have Equipment to Rent?</h2>
-          <p className="text-xl mb-8 text-blue-100 max-w-2xl mx-auto">
-            List your agricultural equipment and earn extra income by helping fellow farmers access the tools they need.
-          </p>
-          <Link href="/create-listing">
-            <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100">
-              List Your Equipment
-              <ChevronRight className="ml-2 h-5 w-5" />
-            </Button>
-          </Link>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div>
-              <div className="flex items-center mb-4">
-                <Wheat className="h-8 w-8 text-green-400" />
-                <span className="ml-2 text-xl font-bold">FarmersZW</span>
-              </div>
-              <p className="text-gray-400">Zimbabwe's premier agricultural equipment rental platform.</p>
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Equipment</h3>
-              <ul className="space-y-2 text-gray-400">
-                <li>
-                  <Link href="/equipment?category=tractors" className="hover:text-white">
-                    Tractors
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/equipment?category=harvesters" className="hover:text-white">
-                    Harvesters
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/equipment?category=planters" className="hover:text-white">
-                    Planters
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/equipment?category=sprayers" className="hover:text-white">
-                    Sprayers
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Support</h3>
-              <ul className="space-y-2 text-gray-400">
-                <li>
-                  <Link href="/help" className="hover:text-white">
-                    Help Center
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/contact" className="hover:text-white">
-                    Contact Us
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/safety" className="hover:text-white">
-                    Safety Guidelines
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/insurance" className="hover:text-white">
-                    Insurance
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Company</h3>
-              <ul className="space-y-2 text-gray-400">
-                <li>
-                  <Link href="/about" className="hover:text-white">
-                    About Us
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/careers" className="hover:text-white">
-                    Careers
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/terms" className="hover:text-white">
-                    Terms of Service
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/privacy" className="hover:text-white">
-                    Privacy Policy
-                  </Link>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div className="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 FarmersZW. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
     </div>
   )
 }

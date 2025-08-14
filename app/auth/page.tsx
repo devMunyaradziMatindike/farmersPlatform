@@ -4,302 +4,326 @@ import type React from "react"
 
 import { useState } from "react"
 import Link from "next/link"
+import { ArrowLeft, Phone, Mail, Eye, EyeOff, Tractor } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Checkbox } from "@/components/ui/checkbox"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Wheat, Mail, Lock, User, Phone, Eye, EyeOff, ArrowLeft } from "lucide-react"
+import { Checkbox } from "@/components/ui/checkbox"
 
 export default function AuthPage() {
+  const [step, setStep] = useState("contact") // contact, otp, password, profile
+  const [contactMethod, setContactMethod] = useState("phone")
   const [showPassword, setShowPassword] = useState(false)
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
+  const [userType, setUserType] = useState("farmer")
+  const [formData, setFormData] = useState({
+    contact: "",
+    otp: "",
+    password: "",
+    confirmPassword: "",
+    firstName: "",
+    lastName: "",
+    location: "",
+    userType: "farmer",
+  })
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    setIsLoading(true)
-    // Simulate API call
-    setTimeout(() => {
-      setIsLoading(false)
-    }, 2000)
+    if (step === "contact") {
+      setStep("otp")
+    } else if (step === "otp") {
+      setStep("password")
+    } else if (step === "password") {
+      setStep("profile")
+    } else {
+      // Complete registration
+      window.location.href = "/dashboard"
+    }
+  }
+
+  const renderContactStep = () => (
+    <div className="space-y-4">
+      <div>
+        <Label htmlFor="contact-method">How would you like to sign up?</Label>
+        <Tabs value={contactMethod} onValueChange={setContactMethod} className="mt-2">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="phone" className="flex items-center gap-2">
+              <Phone className="h-4 w-4" />
+              Phone
+            </TabsTrigger>
+            <TabsTrigger value="email" className="flex items-center gap-2">
+              <Mail className="h-4 w-4" />
+              Email
+            </TabsTrigger>
+          </TabsList>
+        </Tabs>
+      </div>
+
+      <div>
+        <Label htmlFor="contact">{contactMethod === "phone" ? "Phone Number" : "Email Address"}</Label>
+        <Input
+          id="contact"
+          type={contactMethod === "phone" ? "tel" : "email"}
+          placeholder={contactMethod === "phone" ? "+263 123 456 789" : "your@email.com"}
+          value={formData.contact}
+          onChange={(e) => setFormData({ ...formData, contact: e.target.value })}
+          className="mt-1"
+        />
+      </div>
+
+      <div>
+        <Label htmlFor="user-type">I am a:</Label>
+        <Select value={userType} onValueChange={setUserType}>
+          <SelectTrigger className="mt-1">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="farmer">Farmer/Seller</SelectItem>
+            <SelectItem value="buyer">Buyer</SelectItem>
+            <SelectItem value="service-provider">Service Provider</SelectItem>
+            <SelectItem value="worker">Farm Worker</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
+      <Button type="submit" className="w-full bg-green-600 hover:bg-green-700">
+        Send Verification Code
+      </Button>
+    </div>
+  )
+
+  const renderOTPStep = () => (
+    <div className="space-y-4">
+      <div className="text-center">
+        <p className="text-sm text-gray-600">We sent a verification code to {formData.contact}</p>
+      </div>
+
+      <div>
+        <Label htmlFor="otp">Verification Code</Label>
+        <Input
+          id="otp"
+          type="text"
+          placeholder="Enter 6-digit code"
+          value={formData.otp}
+          onChange={(e) => setFormData({ ...formData, otp: e.target.value })}
+          className="mt-1 text-center text-2xl tracking-widest"
+          maxLength={6}
+        />
+      </div>
+
+      <Button type="submit" className="w-full bg-green-600 hover:bg-green-700">
+        Verify Code
+      </Button>
+
+      <div className="text-center">
+        <Button variant="link" className="text-sm">
+          Didn't receive code? Resend
+        </Button>
+      </div>
+    </div>
+  )
+
+  const renderPasswordStep = () => (
+    <div className="space-y-4">
+      <div>
+        <Label htmlFor="password">Create Password</Label>
+        <div className="relative mt-1">
+          <Input
+            id="password"
+            type={showPassword ? "text" : "password"}
+            placeholder="Enter password"
+            value={formData.password}
+            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+          />
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+            onClick={() => setShowPassword(!showPassword)}
+          >
+            {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+          </Button>
+        </div>
+      </div>
+
+      <div>
+        <Label htmlFor="confirm-password">Confirm Password</Label>
+        <Input
+          id="confirm-password"
+          type="password"
+          placeholder="Confirm password"
+          value={formData.confirmPassword}
+          onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
+          className="mt-1"
+        />
+      </div>
+
+      <Button type="submit" className="w-full bg-green-600 hover:bg-green-700">
+        Set Password
+      </Button>
+    </div>
+  )
+
+  const renderProfileStep = () => (
+    <div className="space-y-4">
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <Label htmlFor="first-name">First Name</Label>
+          <Input
+            id="first-name"
+            placeholder="John"
+            value={formData.firstName}
+            onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+            className="mt-1"
+          />
+        </div>
+        <div>
+          <Label htmlFor="last-name">Last Name</Label>
+          <Input
+            id="last-name"
+            placeholder="Mukamuri"
+            value={formData.lastName}
+            onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+            className="mt-1"
+          />
+        </div>
+      </div>
+
+      <div>
+        <Label htmlFor="location">Location</Label>
+        <Select>
+          <SelectTrigger className="mt-1">
+            <SelectValue placeholder="Select your location" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="harare">Harare</SelectItem>
+            <SelectItem value="bulawayo">Bulawayo</SelectItem>
+            <SelectItem value="chitungwiza">Chitungwiza</SelectItem>
+            <SelectItem value="mutare">Mutare</SelectItem>
+            <SelectItem value="gweru">Gweru</SelectItem>
+            <SelectItem value="kwekwe">Kwekwe</SelectItem>
+            <SelectItem value="kadoma">Kadoma</SelectItem>
+            <SelectItem value="masvingo">Masvingo</SelectItem>
+            <SelectItem value="chinhoyi">Chinhoyi</SelectItem>
+            <SelectItem value="norton">Norton</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div>
+        <Label htmlFor="profile-photo">Profile Photo</Label>
+        <Input id="profile-photo" type="file" accept="image/*" className="mt-1" />
+        <p className="text-xs text-gray-500 mt-1">Upload a clear photo of yourself for trust and verification</p>
+      </div>
+
+      <div className="flex items-center space-x-2">
+        <Checkbox id="terms" />
+        <Label htmlFor="terms" className="text-sm">
+          I agree to the{" "}
+          <Link href="/terms" className="text-green-600 hover:underline">
+            Terms of Service
+          </Link>{" "}
+          and{" "}
+          <Link href="/privacy" className="text-green-600 hover:underline">
+            Privacy Policy
+          </Link>
+        </Label>
+      </div>
+
+      <Button type="submit" className="w-full bg-green-600 hover:bg-green-700">
+        Complete Registration
+      </Button>
+    </div>
+  )
+
+  const getStepTitle = () => {
+    switch (step) {
+      case "contact":
+        return "Create Your Account"
+      case "otp":
+        return "Verify Your Contact"
+      case "password":
+        return "Secure Your Account"
+      case "profile":
+        return "Complete Your Profile"
+      default:
+        return "Create Your Account"
+    }
+  }
+
+  const getStepDescription = () => {
+    switch (step) {
+      case "contact":
+        return "Join Zimbabwe's largest agricultural marketplace"
+      case "otp":
+        return "Enter the verification code we sent you"
+      case "password":
+        return "Create a strong password for your account"
+      case "profile":
+        return "Tell us a bit about yourself"
+      default:
+        return "Join Zimbabwe's largest agricultural marketplace"
+    }
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 to-green-100 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
-        {/* Back to Home */}
-        <div className="mb-6">
-          <Link href="/" className="flex items-center text-gray-600 hover:text-green-600 transition-colors">
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Home
+        <div className="text-center mb-8">
+          <Link href="/" className="inline-flex items-center space-x-2 text-green-600 hover:text-green-700">
+            <ArrowLeft className="h-4 w-4" />
+            <span>Back to Home</span>
           </Link>
         </div>
 
-        {/* Logo */}
-        <div className="text-center mb-8">
-          <div className="flex items-center justify-center mb-4">
-            <Wheat className="h-12 w-12 text-green-600" />
+        <Card>
+          <CardHeader className="text-center">
+            <div className="flex justify-center mb-4">
+              <div className="bg-green-100 p-3 rounded-full">
+                <Tractor className="h-8 w-8 text-green-600" />
+              </div>
+            </div>
+            <CardTitle className="text-2xl">{getStepTitle()}</CardTitle>
+            <CardDescription>{getStepDescription()}</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSubmit}>
+              {step === "contact" && renderContactStep()}
+              {step === "otp" && renderOTPStep()}
+              {step === "password" && renderPasswordStep()}
+              {step === "profile" && renderProfileStep()}
+            </form>
+
+            <div className="mt-6 text-center">
+              <p className="text-sm text-gray-600">
+                Already have an account?{" "}
+                <Link href="/login" className="text-green-600 hover:underline font-medium">
+                  Sign in here
+                </Link>
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Progress Indicator */}
+        <div className="mt-6">
+          <div className="flex justify-center space-x-2">
+            {["contact", "otp", "password", "profile"].map((stepName, index) => (
+              <div
+                key={stepName}
+                className={`w-3 h-3 rounded-full ${
+                  step === stepName
+                    ? "bg-green-600"
+                    : ["contact", "otp", "password", "profile"].indexOf(step) > index
+                      ? "bg-green-300"
+                      : "bg-gray-300"
+                }`}
+              />
+            ))}
           </div>
-          <h1 className="text-2xl font-bold text-gray-900">FarmersZW</h1>
-          <p className="text-gray-600">Zimbabwe's Agricultural Platform</p>
-        </div>
-
-        <Tabs defaultValue="signin" className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="signin">Sign In</TabsTrigger>
-            <TabsTrigger value="signup">Sign Up</TabsTrigger>
-          </TabsList>
-
-          {/* Sign In Tab */}
-          <TabsContent value="signin">
-            <Card>
-              <CardHeader>
-                <CardTitle>Welcome Back</CardTitle>
-                <CardDescription>Sign in to your account to continue</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <form onSubmit={handleSubmit} className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="email">Email</Label>
-                    <div className="relative">
-                      <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-                      <Input id="email" type="email" placeholder="your@email.com" className="pl-10" required />
-                    </div>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="password">Password</Label>
-                    <div className="relative">
-                      <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-                      <Input
-                        id="password"
-                        type={showPassword ? "text" : "password"}
-                        placeholder="Enter your password"
-                        className="pl-10 pr-10"
-                        required
-                      />
-                      <button
-                        type="button"
-                        onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                      >
-                        {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                      </button>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-2">
-                      <Checkbox id="remember" />
-                      <Label htmlFor="remember" className="text-sm">
-                        Remember me
-                      </Label>
-                    </div>
-                    <Link href="/forgot-password" className="text-sm text-green-600 hover:underline">
-                      Forgot password?
-                    </Link>
-                  </div>
-
-                  <Button type="submit" className="w-full" disabled={isLoading}>
-                    {isLoading ? "Signing in..." : "Sign In"}
-                  </Button>
-                </form>
-
-                <div className="mt-6">
-                  <div className="relative">
-                    <div className="absolute inset-0 flex items-center">
-                      <div className="w-full border-t border-gray-300" />
-                    </div>
-                    <div className="relative flex justify-center text-sm">
-                      <span className="px-2 bg-white text-gray-500">Or continue with</span>
-                    </div>
-                  </div>
-
-                  <div className="mt-6 grid grid-cols-2 gap-3">
-                    <Button variant="outline" className="w-full bg-transparent">
-                      <svg className="h-4 w-4 mr-2" viewBox="0 0 24 24">
-                        <path
-                          fill="currentColor"
-                          d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-                        />
-                        <path
-                          fill="currentColor"
-                          d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                        />
-                        <path
-                          fill="currentColor"
-                          d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-                        />
-                        <path
-                          fill="currentColor"
-                          d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-                        />
-                      </svg>
-                      Google
-                    </Button>
-                    <Button variant="outline" className="w-full bg-transparent">
-                      <svg className="h-4 w-4 mr-2" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
-                      </svg>
-                      Facebook
-                    </Button>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {/* Sign Up Tab */}
-          <TabsContent value="signup">
-            <Card>
-              <CardHeader>
-                <CardTitle>Create Account</CardTitle>
-                <CardDescription>Join Zimbabwe's premier agricultural platform</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <form onSubmit={handleSubmit} className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="firstName">First Name</Label>
-                      <div className="relative">
-                        <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-                        <Input id="firstName" placeholder="John" className="pl-10" required />
-                      </div>
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="lastName">Last Name</Label>
-                      <Input id="lastName" placeholder="Doe" required />
-                    </div>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="signupEmail">Email</Label>
-                    <div className="relative">
-                      <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-                      <Input id="signupEmail" type="email" placeholder="your@email.com" className="pl-10" required />
-                    </div>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="phone">Phone Number</Label>
-                    <div className="relative">
-                      <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-                      <Input id="phone" type="tel" placeholder="+263 77 123 4567" className="pl-10" required />
-                    </div>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="location">Location</Label>
-                    <Select>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select your province" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="harare">Harare</SelectItem>
-                        <SelectItem value="bulawayo">Bulawayo</SelectItem>
-                        <SelectItem value="manicaland">Manicaland</SelectItem>
-                        <SelectItem value="mashonaland-central">Mashonaland Central</SelectItem>
-                        <SelectItem value="mashonaland-east">Mashonaland East</SelectItem>
-                        <SelectItem value="mashonaland-west">Mashonaland West</SelectItem>
-                        <SelectItem value="masvingo">Masvingo</SelectItem>
-                        <SelectItem value="matabeleland-north">Matabeleland North</SelectItem>
-                        <SelectItem value="matabeleland-south">Matabeleland South</SelectItem>
-                        <SelectItem value="midlands">Midlands</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="userType">I am a</Label>
-                    <Select>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select user type" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="farmer">Farmer</SelectItem>
-                        <SelectItem value="buyer">Buyer</SelectItem>
-                        <SelectItem value="supplier">Supplier</SelectItem>
-                        <SelectItem value="service-provider">Service Provider</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="signupPassword">Password</Label>
-                    <div className="relative">
-                      <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-                      <Input
-                        id="signupPassword"
-                        type={showPassword ? "text" : "password"}
-                        placeholder="Create a strong password"
-                        className="pl-10 pr-10"
-                        required
-                      />
-                      <button
-                        type="button"
-                        onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                      >
-                        {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                      </button>
-                    </div>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="confirmPassword">Confirm Password</Label>
-                    <div className="relative">
-                      <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-                      <Input
-                        id="confirmPassword"
-                        type={showConfirmPassword ? "text" : "password"}
-                        placeholder="Confirm your password"
-                        className="pl-10 pr-10"
-                        required
-                      />
-                      <button
-                        type="button"
-                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                      >
-                        {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                      </button>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center space-x-2">
-                    <Checkbox id="terms" required />
-                    <Label htmlFor="terms" className="text-sm">
-                      I agree to the{" "}
-                      <Link href="/terms" className="text-green-600 hover:underline">
-                        Terms of Service
-                      </Link>{" "}
-                      and{" "}
-                      <Link href="/privacy" className="text-green-600 hover:underline">
-                        Privacy Policy
-                      </Link>
-                    </Label>
-                  </div>
-
-                  <Button type="submit" className="w-full" disabled={isLoading}>
-                    {isLoading ? "Creating account..." : "Create Account"}
-                  </Button>
-                </form>
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </Tabs>
-
-        {/* Footer */}
-        <div className="mt-8 text-center text-sm text-gray-600">
-          <p>
-            Need help?{" "}
-            <Link href="/contact" className="text-green-600 hover:underline">
-              Contact Support
-            </Link>
-          </p>
         </div>
       </div>
     </div>
