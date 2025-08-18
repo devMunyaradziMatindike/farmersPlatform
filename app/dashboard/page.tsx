@@ -701,44 +701,7 @@ export default function DashboardPage() {
           </TabsContent>
         </Tabs>
 
-        {/* Partners Section - Always Visible */}
-        <section className="mt-12 bg-white rounded-lg border p-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">Our Trusted Partners</h2>
 
-          <div className="relative overflow-hidden">
-            <div className="flex animate-marquee">
-              {/* Partners list */}
-              <div className="flex space-x-8 flex-shrink-0">
-                {partners.map((partner, index) => (
-                  <div key={index} className="flex flex-col items-center p-4 bg-gray-50 rounded-lg min-w-[200px]">
-                    <div className="w-32 h-16 bg-green-100 rounded flex items-center justify-center mb-2">
-                      <span className="text-green-700 font-bold text-sm">{partner.name}</span>
-                    </div>
-                    <p className="text-xs text-center text-gray-600 font-medium">{partner.name}</p>
-                  </div>
-                ))}
-              </div>
-
-              {/* Duplicate for seamless loop */}
-              <div className="flex space-x-8 flex-shrink-0">
-                {partners.map((partner, index) => (
-                  <div key={index} className="flex flex-col items-center p-4 bg-gray-50 rounded-lg min-w-[200px]">
-                    <div className="w-32 h-16 bg-green-100 rounded flex items-center justify-center mb-2">
-                      <span className="text-green-700 font-bold text-sm">{partner.name}</span>
-                    </div>
-                    <p className="text-xs text-center text-gray-600 font-medium">{partner.name}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          <div className="text-center mt-6">
-            <p className="text-sm text-gray-600">
-              Partnering with leading organizations to support Zimbabwe's agricultural sector
-            </p>
-          </div>
-        </section>
       </div>
     </div>
   )

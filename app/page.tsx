@@ -137,10 +137,10 @@ export default function HomePage() {
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
-              <h1 className="text-4xl lg:text-6xl font-bold text-gray-900 mb-6">
-                Zimbabwe's Complete
-                <span className="text-green-600"> Agricultural Marketplace</span>
-              </h1>
+                             <h1 className="text-4xl lg:text-6xl font-bold text-gray-900 mb-6">
+                 Musika Wethu
+                 <span className="text-green-600"> - Our Market</span>
+               </h1>
               <p className="text-xl text-gray-600 mb-8">
                 Connect with farmers, rent equipment, find workers, hire experts, and discover agricultural events.
                 Everything you need for successful farming in one place.
@@ -158,16 +158,16 @@ export default function HomePage() {
                 </Link>
               </div>
             </div>
-            <div className="relative">
-              <Image
-                src="/images/hero-tractor-main.png"
-                alt="Modern John Deere tractor in agricultural field - Zimbabwe farming equipment"
-                width={600}
-                height={500}
-                className="rounded-lg shadow-2xl"
-                priority
-              />
-            </div>
+                         <div className="relative">
+               <Image
+                 src="/images/mbare_market.png"
+                 alt="Mbare Market - Zimbabwe's largest agricultural market showcasing fresh produce and local farmers"
+                 width={600}
+                 height={500}
+                 className="rounded-lg shadow-2xl"
+                 priority
+               />
+             </div>
           </div>
         </div>
       </section>
@@ -239,82 +239,70 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Payment Integration Section */}
-      <section className="bg-gradient-to-r from-blue-50 to-indigo-50 py-16">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Seamless Payment Solutions</h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Supporting Zimbabwe's agricultural value chain with integrated local payment methods. Pay and get paid
-              using your preferred mobile money or banking solution.
-            </p>
-          </div>
+             {/* Connection & Payment Section */}
+       <section className="bg-gradient-to-r from-blue-50 to-indigo-50 py-16">
+         <div className="container mx-auto px-4">
+           <div className="text-center mb-12">
+             <h2 className="text-3xl font-bold text-gray-900 mb-4">Direct Connections, Flexible Payments</h2>
+             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+               Musika Wethu connects buyers and sellers directly, allowing you to negotiate and handle payments using your preferred method. 
+               We facilitate the connection, you handle the transaction your way.
+             </p>
+           </div>
 
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <div className="bg-white rounded-2xl p-8 shadow-2xl transform -rotate-2 hover:rotate-0 transition-transform duration-300">
-                <Image
-                  src="/images/payment-partners.png"
-                  alt="Payment Partners - EcoCash, OneMoney, InnBucks, BancABC Visa"
-                  width={600}
-                  height={400}
-                  className="w-full h-auto rounded-lg shadow-lg"
-                />
-              </div>
-            </div>
+           <div className="grid lg:grid-cols-2 gap-12 items-center">
+             <div>
+               <div className="bg-white rounded-2xl p-8 shadow-2xl transform -rotate-2 hover:rotate-0 transition-transform duration-300">
+                 <Image
+                   src="/images/payment-partners.png"
+                   alt="Payment Partners - EcoCash, OneMoney, InnBucks, BancABC Visa"
+                   width={600}
+                   height={400}
+                   className="w-full h-auto rounded-lg shadow-lg"
+                 />
+               </div>
+             </div>
 
-            <div className="space-y-8">
-              <div className="flex items-start space-x-4">
-                <div className="bg-green-100 p-3 rounded-full flex-shrink-0">
-                  <CreditCard className="h-6 w-6 text-green-600" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-semibold mb-2">Multiple Payment Options</h3>
-                  <p className="text-gray-600">
-                    Accept payments through EcoCash, OneMoney, InnBucks, and major banking cards. Choose what works best
-                    for your customers.
-                  </p>
-                </div>
-              </div>
+             <div className="space-y-8">
+               <div className="flex items-start space-x-4">
+                 <div className="bg-green-100 p-3 rounded-full flex-shrink-0">
+                   <Users className="h-6 w-6 text-green-600" />
+                 </div>
+                 <div>
+                   <h3 className="text-xl font-semibold mb-2">Direct Connections</h3>
+                   <p className="text-gray-600">
+                     Connect directly with buyers and sellers. Negotiate terms, prices, and payment methods that work best for both parties.
+                   </p>
+                 </div>
+               </div>
 
-              <div className="flex items-start space-x-4">
-                <div className="bg-blue-100 p-3 rounded-full flex-shrink-0">
-                  <Shield className="h-6 w-6 text-blue-600" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-semibold mb-2">Secure Transactions</h3>
-                  <p className="text-gray-600">
-                    All payments are processed through secure, regulated financial institutions ensuring your money is
-                    safe and transactions are protected.
-                  </p>
-                </div>
-              </div>
+               <div className="flex items-start space-x-4">
+                 <div className="bg-blue-100 p-3 rounded-full flex-shrink-0">
+                   <CreditCard className="h-6 w-6 text-blue-600" />
+                 </div>
+                 <div>
+                   <h3 className="text-xl font-semibold mb-2">Flexible Payment Options</h3>
+                   <p className="text-gray-600">
+                     Use EcoCash, OneMoney, InnBucks, bank transfers, or cash - whatever payment method you and your trading partner prefer.
+                   </p>
+                 </div>
+               </div>
 
-              <div className="flex items-start space-x-4">
-                <div className="bg-purple-100 p-3 rounded-full flex-shrink-0">
-                  <Zap className="h-6 w-6 text-purple-600" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-semibold mb-2">Instant Settlements</h3>
-                  <p className="text-gray-600">
-                    Get paid instantly when transactions are completed. No waiting periods - your money is available
-                    immediately for reinvestment in your farm.
-                  </p>
-                </div>
-              </div>
-
-              <div className="pt-4">
-                <Link href="/auth">
-                  <Button size="lg" className="bg-green-600 hover:bg-green-700">
-                    Start Accepting Payments
-                    <ArrowRight className="ml-2 h-5 w-5" />
-                  </Button>
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+               <div className="flex items-start space-x-4">
+                 <div className="bg-purple-100 p-3 rounded-full flex-shrink-0">
+                   <Shield className="h-6 w-6 text-purple-600" />
+                 </div>
+                 <div>
+                   <h3 className="text-xl font-semibold mb-2">Secure Communication</h3>
+                   <p className="text-gray-600">
+                     Communicate safely through our platform while handling payments directly with your trading partners using trusted local methods.
+                   </p>
+                 </div>
+               </div>
+             </div>
+           </div>
+         </div>
+       </section>
 
       {/* Features */}
       <section className="bg-gray-50 py-16">
@@ -351,6 +339,87 @@ export default function HomePage() {
               <h3 className="text-xl font-semibold mb-2">Local Focus</h3>
               <p className="text-gray-600">Find everything you need within your local area across Zimbabwe.</p>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Trusted Partners Section */}
+      <section className="bg-white py-16">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl font-bold text-center mb-12">Our Trusted Partners</h2>
+          
+                     <div className="relative overflow-hidden">
+             <div className="flex animate-marquee">
+               {/* Partners list */}
+               <div className="flex space-x-8 flex-shrink-0">
+                 {[
+                   { name: "Ministry of Lands", logo: "/images/ministryoflandslogo.png" },
+                   { name: "Agricultural Marketing Authority", logo: "/images/agriculturalmarketingauthority.jpg" },
+                   { name: "Landini Tractors", logo: "/images/landini.jpg.png" },
+                   { name: "Massey Ferguson", logo: "/images/masseyFerguson.png" },
+                   { name: "John Deere", logo: "/images/john-deere-logo.jpg" },
+                   { name: "SeedCo", logo: "/images/seedco.png" },
+                   { name: "Commercial Farmers Union", logo: "/images/cfu.png" },
+                   { name: "Windmill", logo: "/images/windmill.png" },
+                   { name: "AFC", logo: "/images/afc.png" },
+                 ].map((partner, index) => (
+                   <div key={index} className="flex flex-col items-center p-4 bg-white rounded-lg min-w-[200px] shadow-sm hover:shadow-md transition-shadow">
+                     <div className="w-32 h-16 flex items-center justify-center mb-2 p-2">
+                       <Image
+                         src={partner.logo}
+                         alt={`${partner.name} logo`}
+                         width={120}
+                         height={60}
+                         className="max-w-full max-h-full object-contain"
+                         style={{ background: "transparent" }}
+                       />
+                     </div>
+                     <p className="text-xs text-center text-gray-600 font-medium">{partner.name}</p>
+                   </div>
+                 ))}
+               </div>
+
+               {/* Duplicate for seamless loop */}
+               <div className="flex space-x-8 flex-shrink-0">
+                 {[
+                   { name: "Ministry of Lands", logo: "/images/ministryoflandslogo.png" },
+                   { name: "Agricultural Marketing Authority", logo: "/images/agriculturalmarketingauthority.jpg" },
+                   { name: "Landini Tractors", logo: "/images/landini.jpg.png" },
+                   { name: "Massey Ferguson", logo: "/images/masseyFerguson.png" },
+                   { name: "John Deere", logo: "/images/john-deere-logo.jpg" },
+                   { name: "SeedCo", logo: "/images/seedco.png" },
+                   { name: "Commercial Farmers Union", logo: "/images/cfu.png" },
+                   { name: "Windmill", logo: "/images/windmill.png" },
+                   { name: "AFC", logo: "/images/afc.png" },
+                 ].map((partner, index) => (
+                   <div key={index} className="flex flex-col items-center p-4 bg-white rounded-lg min-w-[200px] shadow-sm hover:shadow-md transition-shadow">
+                     <div className="w-32 h-16 flex items-center justify-center mb-2 p-2">
+                       <Image
+                         src={partner.logo}
+                         alt={`${partner.name} logo`}
+                         width={120}
+                         height={60}
+                         className="max-w-full max-h-full object-contain"
+                         style={{ background: "transparent" }}
+                       />
+                     </div>
+                     <p className="text-xs text-center text-gray-600 font-medium">{partner.name}</p>
+                   </div>
+                 ))}
+               </div>
+             </div>
+           </div>
+
+          <div className="text-center mt-8">
+            <p className="text-lg text-gray-600 mb-6">
+              Partnering with leading organizations to support Zimbabwe's agricultural sector
+            </p>
+            <Link href="/auth">
+              <Button size="lg" className="bg-green-600 hover:bg-green-700">
+                Join Our Network
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+            </Link>
           </div>
         </div>
       </section>

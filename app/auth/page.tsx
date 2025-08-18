@@ -4,7 +4,8 @@ import type React from "react"
 
 import { useState } from "react"
 import Link from "next/link"
-import { ArrowLeft, Phone, Mail, Eye, EyeOff, Tractor } from "lucide-react"
+import Image from "next/image"
+import { ArrowLeft, Phone, Mail, Eye, EyeOff } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -79,12 +80,11 @@ export default function AuthPage() {
           <SelectTrigger className="mt-1">
             <SelectValue />
           </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="farmer">Farmer/Seller</SelectItem>
-            <SelectItem value="buyer">Buyer</SelectItem>
-            <SelectItem value="service-provider">Service Provider</SelectItem>
-            <SelectItem value="worker">Farm Worker</SelectItem>
-          </SelectContent>
+                     <SelectContent>
+             <SelectItem value="farmer">Farmer/Seller</SelectItem>
+             <SelectItem value="buyer">Buyer</SelectItem>
+             <SelectItem value="service-provider">Service Provider</SelectItem>
+           </SelectContent>
         </Select>
       </div>
 
@@ -270,61 +270,102 @@ export default function AuthPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-green-100 flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
-        <div className="text-center mb-8">
-          <Link href="/" className="inline-flex items-center space-x-2 text-green-600 hover:text-green-700">
+    <div className="min-h-screen relative flex overflow-hidden">
+      {/* Background Gradient */}
+      <div className="absolute inset-0 z-0 bg-gradient-to-br from-green-600 via-green-700 to-green-800"></div>
+      
+                                  {/* Left Side - Form */}
+          <div className="relative z-10 w-full lg:w-1/2 flex items-center justify-center p-4 lg:p-4 pt-20">
+          <div className="w-full max-w-md">
+
+          <Card className="bg-white/95 backdrop-blur-sm border-0 shadow-2xl">
+                         <CardHeader className="text-center">
+               <div className="flex justify-center mb-4">
+                 <div className="bg-green-100 p-4 rounded-full">
+                   <Image
+                     src="/images/musika-wethu-logo.png"
+                     alt="Musika Wethu Logo"
+                     width={48}
+                     height={48}
+                     className="h-12 w-auto"
+                     style={{ background: "transparent" }}
+                   />
+                 </div>
+               </div>
+              <CardTitle className="text-2xl text-gray-900">{getStepTitle()}</CardTitle>
+              <CardDescription className="text-gray-700">{getStepDescription()}</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <form onSubmit={handleSubmit}>
+                {step === "contact" && renderContactStep()}
+                {step === "otp" && renderOTPStep()}
+                {step === "password" && renderPasswordStep()}
+                {step === "profile" && renderProfileStep()}
+              </form>
+
+              <div className="mt-6 text-center">
+                <p className="text-sm text-gray-600">
+                  Already have an account?{" "}
+                  <Link href="/login" className="text-green-600 hover:underline font-medium">
+                    Sign in here
+                  </Link>
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Progress Indicator */}
+          <div className="mt-6">
+            <div className="flex justify-center space-x-2">
+              {["contact", "otp", "password", "profile"].map((stepName, index) => (
+                <div
+                  key={stepName}
+                  className={`w-3 h-3 rounded-full ${
+                    step === stepName
+                      ? "bg-green-600"
+                      : ["contact", "otp", "password", "profile"].indexOf(step) > index
+                        ? "bg-green-300"
+                        : "bg-gray-300"
+                  }`}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+                                         {/* Back to Home Button - Top Center */}
+        <div className="hidden lg:flex absolute top-8 left-1/2 transform -translate-x-1/2 z-20">
+          <Link href="/" className="inline-flex items-center space-x-2 text-white hover:text-green-200 bg-black/30 px-4 py-2 rounded-lg backdrop-blur-sm border border-white/20">
             <ArrowLeft className="h-4 w-4" />
             <span>Back to Home</span>
           </Link>
         </div>
 
-        <Card>
-          <CardHeader className="text-center">
-            <div className="flex justify-center mb-4">
-              <div className="bg-green-100 p-3 rounded-full">
-                <Tractor className="h-8 w-8 text-green-600" />
-              </div>
+       {/* Right Side - African Man Image */}
+          <div className="hidden lg:flex relative z-10 w-1/2 items-center justify-center p-4 lg:p-4 pt-20">
+          <div className="relative w-full max-w-md h-[540px]">
+           <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-2xl"></div>
+           <img 
+             src="/images/african-man-harvesting-vegetables.jpg" 
+             alt="African farmer harvesting vegetables" 
+             className="w-full h-full object-cover rounded-2xl shadow-2xl"
+           />
+                       <div className="absolute bottom-8 left-8 right-8 text-white">
+              <h2 className="text-3xl font-bold mb-2">musika. market. imbala</h2>
+              <p className="text-lg opacity-90">Connect with farmers, buyers, and service providers across the country</p>
             </div>
-            <CardTitle className="text-2xl">{getStepTitle()}</CardTitle>
-            <CardDescription>{getStepDescription()}</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubmit}>
-              {step === "contact" && renderContactStep()}
-              {step === "otp" && renderOTPStep()}
-              {step === "password" && renderPasswordStep()}
-              {step === "profile" && renderProfileStep()}
-            </form>
+         </div>
+       </div>
 
-            <div className="mt-6 text-center">
-              <p className="text-sm text-gray-600">
-                Already have an account?{" "}
-                <Link href="/login" className="text-green-600 hover:underline font-medium">
-                  Sign in here
-                </Link>
-              </p>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Progress Indicator */}
-        <div className="mt-6">
-          <div className="flex justify-center space-x-2">
-            {["contact", "otp", "password", "profile"].map((stepName, index) => (
-              <div
-                key={stepName}
-                className={`w-3 h-3 rounded-full ${
-                  step === stepName
-                    ? "bg-green-600"
-                    : ["contact", "otp", "password", "profile"].indexOf(step) > index
-                      ? "bg-green-300"
-                      : "bg-gray-300"
-                }`}
-              />
-            ))}
-          </div>
-        </div>
+      {/* Mobile Image Background (for smaller screens) */}
+      <div className="lg:hidden absolute inset-0 z-0">
+        <div className="absolute inset-0 bg-black/40"></div>
+        <img 
+          src="/images/african-man-harvesting-vegetables.jpg" 
+          alt="African farmer harvesting vegetables" 
+          className="w-full h-full object-cover"
+        />
       </div>
     </div>
   )
