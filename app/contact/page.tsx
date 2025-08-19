@@ -92,7 +92,7 @@ export default function ContactPage() {
                       <Button 
                         size="sm" 
                         className="bg-green-600 hover:bg-green-700"
-                        onClick={() => window.open('tel:+263782339300')}
+                        onClick={() => window.open('tel:+263 78 233 9300')}
                       >
                         <Phone className="h-4 w-4 mr-2" />
                         Call Now

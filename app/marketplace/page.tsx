@@ -3,6 +3,7 @@
 import { useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
+import NavigationLink from "@/components/navigation-link"
 import { Search, MapPin, Phone, MessageCircle, Heart, SlidersHorizontal, Grid3X3, List } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -368,27 +369,27 @@ export default function MarketplacePage() {
               />
             </Link>
             <nav className="hidden md:flex items-center space-x-6">
-              <Link href="/marketplace" className="text-green-600 font-medium">
+              <NavigationLink href="/marketplace" className="text-green-600 font-medium">
                 Marketplace
-              </Link>
-              <Link href="/equipment" className="text-gray-600 hover:text-green-600">
+              </NavigationLink>
+              <NavigationLink href="/equipment" className="text-gray-600 hover:text-green-600">
                 Equipment
-              </Link>
-              <Link href="/jobs" className="text-gray-600 hover:text-green-600">
+              </NavigationLink>
+              <NavigationLink href="/jobs" className="text-gray-600 hover:text-green-600">
                 Jobs
-              </Link>
-              <Link href="/services" className="text-gray-600 hover:text-green-600">
+              </NavigationLink>
+              <NavigationLink href="/services" className="text-gray-600 hover:text-green-600">
                 Services
-              </Link>
-              <Link href="/events" className="text-gray-600 hover:text-green-600">
+              </NavigationLink>
+              <NavigationLink href="/events" className="text-gray-600 hover:text-green-600">
                 Events
-              </Link>
-              <Link href="/livestock" className="text-gray-600 hover:text-green-600">
+              </NavigationLink>
+              <NavigationLink href="/livestock" className="text-gray-600 hover:text-green-600">
                 Livestock
-              </Link>
-              <Link href="/legal-compliance" className="text-gray-600 hover:text-green-600">
+              </NavigationLink>
+              <NavigationLink href="/legal-compliance" className="text-gray-600 hover:text-green-600">
                 Legal Compliance
-              </Link>
+              </NavigationLink>
             </nav>
             <div className="flex items-center space-x-2">
               <Link href="/dashboard">

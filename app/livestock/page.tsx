@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 import Image from "next/image"
+import NavigationLink from "@/components/navigation-link"
 import {
   Heart,
   TrendingUp,
@@ -156,27 +157,27 @@ export default function LivestockPage() {
               />
             </Link>
             <nav className="hidden md:flex items-center space-x-6">
-              <Link href="/marketplace" className="text-gray-600 hover:text-green-600">
+              <NavigationLink href="/marketplace" className="text-gray-600 hover:text-green-600">
                 Marketplace
-              </Link>
-              <Link href="/equipment" className="text-gray-600 hover:text-green-600">
+              </NavigationLink>
+              <NavigationLink href="/equipment" className="text-gray-600 hover:text-green-600">
                 Equipment
-              </Link>
-              <Link href="/jobs" className="text-gray-600 hover:text-green-600">
+              </NavigationLink>
+              <NavigationLink href="/jobs" className="text-gray-600 hover:text-green-600">
                 Jobs
-              </Link>
-              <Link href="/services" className="text-gray-600 hover:text-green-600">
+              </NavigationLink>
+              <NavigationLink href="/services" className="text-gray-600 hover:text-green-600">
                 Services
-              </Link>
-              <Link href="/events" className="text-gray-600 hover:text-green-600">
+              </NavigationLink>
+              <NavigationLink href="/events" className="text-gray-600 hover:text-green-600">
                 Events
-              </Link>
-              <Link href="/livestock" className="text-green-600 font-medium">
+              </NavigationLink>
+              <NavigationLink href="/livestock" className="text-green-600 font-medium">
                 Livestock
-              </Link>
-              <Link href="/legal-compliance" className="text-gray-600 hover:text-green-600">
+              </NavigationLink>
+              <NavigationLink href="/legal-compliance" className="text-gray-600 hover:text-green-600">
                 Legal Compliance
-              </Link>
+              </NavigationLink>
             </nav>
             <div className="flex items-center space-x-2">
               <Link href="/dashboard">
@@ -633,12 +634,12 @@ export default function LivestockPage() {
               </ul>
             </div>
             <div>
-              <h3 className="font-semibold mb-4">Contact</h3>
-              <div className="space-y-2 text-gray-400">
-                <p>📞 +263 123 456 789</p>
-                <p>📧 livestock@musikawethu.co.zw</p>
-                <p>📍 Harare, Zimbabwe</p>
-              </div>
+                              <h3 className="font-semibold mb-4">Contact</h3>
+                <div className="space-y-2 text-gray-400">
+                  <p>📞 +263 78 233 9300</p>
+                  <p>📧 livestock@musikawethu.co.zw</p>
+                  <p>📍 Harare, Zimbabwe</p>
+                </div>
             </div>
           </div>
           <Separator className="my-8 bg-gray-800" />

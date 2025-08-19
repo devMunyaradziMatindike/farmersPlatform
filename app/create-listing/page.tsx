@@ -567,14 +567,14 @@ export default function CreateListingPage() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <Label htmlFor="phone">Phone Number *</Label>
-                      <Input id="phone" placeholder="+263 123 456 789" className="mt-1" />
-                    </div>
-                    <div>
-                      <Label htmlFor="whatsapp">WhatsApp Number</Label>
-                      <Input id="whatsapp" placeholder="+263 123 456 789" className="mt-1" />
-                    </div>
+                                          <div>
+                        <Label htmlFor="phone">Phone Number *</Label>
+                        <Input id="phone" placeholder="+263 78 233 9300" className="mt-1" />
+                      </div>
+                      <div>
+                        <Label htmlFor="whatsapp">WhatsApp Number</Label>
+                        <Input id="whatsapp" placeholder="+263 78 233 9300" className="mt-1" />
+                      </div>
                   </div>
 
                   <div>

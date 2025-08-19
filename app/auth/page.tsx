@@ -65,11 +65,11 @@ export default function AuthPage() {
       <div>
         <Label htmlFor="contact">{contactMethod === "phone" ? "Phone Number" : "Email Address"}</Label>
         <Input
-          id="contact"
-          type={contactMethod === "phone" ? "tel" : "email"}
-          placeholder={contactMethod === "phone" ? "+263 123 456 789" : "your@email.com"}
-          value={formData.contact}
-          onChange={(e) => setFormData({ ...formData, contact: e.target.value })}
+                              id="contact"
+                    type={contactMethod === "phone" ? "tel" : "email"}
+                    placeholder={contactMethod === "phone" ? "+263 78 233 9300" : "your@email.com"}
+                    value={formData.contact}
+                    onChange={(e) => setFormData({ ...formData, contact: e.target.value })}
           className="mt-1"
         />
       </div>
